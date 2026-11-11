@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentimentPulse AI | Dataset Analysis & Revenue Intelligence</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for Interactive Dashboard & Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- PapaParse for robust CSV Parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                            accent: '#06b6d4',
+                            emerald: '#10b981',
+                            rose: '#f43f5e',
+                            amber: '#f59e0b'
+                        },
+                        dark: {
+                            bg: '#0b0f19',
+                            card: '#111827',
+                            border: '#1f293d',
+                            hover: '#1e293b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Glowing & Gradient Effects */
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1 0%, #06b6d4 50%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glow-effect {
+            box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.3);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f293d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
+    </style>
+</head>
+<body class="bg-[#0b0f19] text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- NAVIGATION HEADER -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-accent flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
+                    <i data-lucide="activity" class="w-6 h-6"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight text-white">Sentiment<span class="gradient-text">Pulse</span> AI</span>
+            </div>
+
+            <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-300">
+                <a href="#dataset-analyzer" class="hover:text-white transition-colors flex items-center gap-1.5"><i data-lucide="file-spreadsheet" class="w-4 h-4 text-brand-accent"></i> Dataset Analyzer</a>
+                <a href="#dashboard" class="hover:text-white transition-colors">Analytics Suite</a>
+                <a href="#quick-demo" class="hover:text-white transition-colors">Single Review</a>
+                <a href="#features" class="hover:text-white transition-colors">Features</a>
+                <a href="#calculator" class="hover:text-white transition-colors">ROI Calculator</a>
+                <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <a href="#dataset-analyzer" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-brand-accent hover:from-brand-500 hover:to-brand-400 text-white font-medium text-sm shadow-lg shadow-brand-600/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <i data-lucide="upload-cloud" class="w-4 h-4"></i> Analyze Dataset
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-36 pb-20 md:pt-48 md:pb-28 overflow-hidden">
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#1f293d15_1px,transparent_1px),linear-gradient(to_bottom,#1f293d15_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-brand-600/20 blur-[130px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-brand-500/30 text-xs font-semibold text-brand-400 mb-8">
+                <span class="w-2 h-2 rounded-full bg-brand-accent animate-ping"></span>
+                <span>NEW v4.0: Bulk CSV & JSON Batch Intelligence Engine</span>
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.15] max-w-5xl mx-auto">
+                Turn Raw CSV & Review Datasets Into <span class="gradient-text">Revenue Action</span>
+            </h1>
+
+            <p class="mt-6 text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed">
+                Upload your CSV or JSON datasets of customer feedback, G2 reviews, Shopify orders, or sales calls. Get instant sentiment breakdown, churn detection, and topic analysis in seconds.
+            </p>
+
+            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#dataset-analyzer" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-600 via-brand-500 to-brand-accent text-white font-semibold text-base shadow-xl shadow-brand-600/30 hover:scale-[1.02] transition-all flex items-center justify-center gap-3">
+                    <i data-lucide="file-up" class="w-5 h-5"></i> Upload CSV/JSON Dataset
+                </a>
+                <button onclick="loadSampleDataset('saas')" class="w-full sm:w-auto px-8 py-4 rounded-xl glass-panel text-slate-200 hover:text-white border border-slate-700 hover:border-brand-500 font-semibold text-base transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-brand-accent"></i> Try Live Demo Dataset
+                </button>
+            </div>
+
+            <!-- KPI Badges -->
+            <div class="mt-16 pt-10 border-t border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-6 text-left max-w-4xl mx-auto">
+                <div class="p-4 rounded-xl glass-panel">
+                    <div class="text-3xl font-bold text-white">100k+</div>
+                    <div class="text-xs text-slate-400 mt-1">Row Instant Processing</div>
+                </div>
+                <div class="p-4 rounded-xl glass-panel">
+                    <div class="text-3xl font-bold text-brand-accent">100%</div>
+                    <div class="text-xs text-slate-400 mt-1">Client-Side Data Privacy</div>
+                </div>
+                <div class="p-4 rounded-xl glass-panel">
+                    <div class="text-3xl font-bold text-emerald-400">99.4%</div>
+                    <div class="text-xs text-slate-400 mt-1">Sentiment Precision</div>
+                </div>
+                <div class="p-4 rounded-xl glass-panel">
+                    <div class="text-3xl font-bold text-amber-400">CSV & JSON</div>
+                    <div class="text-xs text-slate-400 mt-1">Auto-Column Matching</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: CSV / JSON DATASET ANALYZER MODULE -->
+    <section id="dataset-analyzer" class="py-16 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <span class="text-xs font-semibold tracking-wider text-brand-accent uppercase bg-brand-accent/10 px-3 py-1 rounded-full border border-brand-accent/20">Core Dataset Analyzer</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white mt-3">Batch CSV / JSON Sentiment Intelligence</h2>
+                <p class="text-slate-400 mt-2 max-w-2xl mx-auto text-sm">Upload your own file or choose one of our sample datasets below to run instant client-side batch sentiment extraction and churn analysis.</p>
+            </div>
+
+            <!-- Sample Dataset Fast Load Bar -->
+            <div class="bg-dark-card border border-slate-800 rounded-2xl p-4 mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2 text-xs font-semibold text-slate-300">
+                    <i data-lucide="database" class="w-4 h-4 text-brand-400"></i> Load Instant Demo Datasets:
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="loadSampleDataset('saas')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700 hover:border-brand-500 transition-all flex items-center gap-2">
+                        <i data-lucide="cloud" class="w-3.5 h-3.5 text-brand-400"></i> B2B SaaS Reviews (20 Rows)
+                    </button>
+                    <button onclick="loadSampleDataset('ecom')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700 hover:border-brand-500 transition-all flex items-center gap-2">
+                        <i data-lucide="shopping-cart" class="w-3.5 h-3.5 text-emerald-400"></i> E-commerce Orders (20 Rows)
+                    </button>
+                    <button onclick="loadSampleDataset('appstore')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700 hover:border-brand-500 transition-all flex items-center gap-2">
+                        <i data-lucide="smartphone" class="w-3.5 h-3.5 text-amber-400"></i> App Store Feedback (20 Rows)
+                    </button>
+                    <button onclick="downloadSampleCSV()" class="px-3.5 py-2 rounded-xl bg-brand-500/10 hover:bg-brand-500/20 text-xs font-medium text-brand-300 border border-brand-500/30 transition-all flex items-center gap-1.5">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i> Download Sample CSV
+                    </button>
+                </div>
+            </div>
+
+            <!-- Upload & Column Mapping Workspace Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left: File Upload Dropzone & Column Selector -->
+                <div class="lg:col-span-5 bg-dark-card border border-slate-800 rounded-2xl p-6 shadow-2xl">
+                    <h3 class="text-base font-semibold text-white flex items-center gap-2 mb-4">
+                        <i data-lucide="file-spreadsheet" class="w-5 h-5 text-brand-accent"></i> 1. Import CSV or JSON File
+                    </h3>
+
+                    <!-- Drag & Drop Zone -->
+                    <div id="dropZone" onclick="document.getElementById('fileInput').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleFileDrop(event)" class="border-2 border-dashed border-slate-700 hover:border-brand-500 rounded-xl p-8 text-center cursor-pointer bg-slate-950/50 hover:bg-slate-900/50 transition-all group">
+                        <input type="file" id="fileInput" accept=".csv, .json" class="hidden" onchange="handleFileSelect(event)">
+                        <div class="w-14 h-14 rounded-full bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 mx-auto mb-3 group-hover:scale-110 transition-transform">
+                            <i data-lucide="upload-cloud" class="w-7 h-7"></i>
+                        </div>
+                        <p class="text-sm font-medium text-slate-200">Click to upload or drag & drop</p>
+                        <p class="text-xs text-slate-500 mt-1">Supports CSV, TSV, or JSON format (Max 15MB)</p>
+                        <p id="fileNameDisplay" class="text-xs font-mono text-brand-accent mt-3 hidden"></p>
+                    </div>
+
+                    <!-- Column Detection & Mapping Section -->
+                    <div id="mappingSection" class="mt-6 pt-6 border-t border-slate-800 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-1.5">
+                                <i data-lucide="sliders" class="w-3.5 h-3.5 text-brand-400"></i> Auto-Detected Columns
+                            </h4>
+                            <span class="text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Auto-Mapped</span>
+                        </div>
+
+                        <div>
+                            <label class="text-xs text-slate-300 font-medium block mb-1">Text / Review Feedback Column *</label>
+                            <select id="colText" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500"></select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-xs text-slate-300 font-medium block mb-1">Rating Column (Optional)</label>
+                                <select id="colRating" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500"></select>
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-300 font-medium block mb-1">Deal / Order ($) Column</label>
+                                <select id="colValue" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500"></select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-xs text-slate-300 font-medium block mb-1">Customer Name Column</label>
+                                <select id="colCustomer" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500"></select>
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-300 font-medium block mb-1">Date Column</label>
+                                <select id="colDate" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500"></select>
+                            </div>
+                        </div>
+
+                        <button onclick="runBatchAnalysis()" id="runBatchBtn" class="w-full mt-2 py-3.5 rounded-xl bg-gradient-to-r from-brand-600 via-brand-500 to-brand-accent hover:from-brand-500 hover:to-brand-400 text-white font-medium text-sm shadow-lg shadow-brand-600/30 flex items-center justify-center gap-2 transition-all">
+                            <i data-lucide="play" class="w-4 h-4"></i> Run Dataset Batch Analysis
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Analysis Summary KPI Cards & Active Dataset Status -->
+                <div class="lg:col-span-7 space-y-6">
+                    
+                    <!-- KPI Cards Summary Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="p-4 rounded-xl bg-dark-card border border-slate-800">
+                            <span class="text-xs text-slate-400 block mb-1">Total Dataset Rows</span>
+                            <div id="kpiTotalRows" class="text-2xl font-bold text-white">0</div>
+                            <span class="text-[11px] text-slate-500 font-mono mt-1 block">Active dataset size</span>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-dark-card border border-slate-800">
+                            <span class="text-xs text-slate-400 block mb-1">Avg Sentiment Score</span>
+                            <div id="kpiAvgScore" class="text-2xl font-bold text-emerald-400">0%</div>
+                            <span id="kpiCsat" class="text-[11px] text-slate-400 font-mono mt-1 block">CSAT Proxy: N/A</span>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-dark-card border border-slate-800">
+                            <span class="text-xs text-slate-400 block mb-1">High Churn Risk Rows</span>
+                            <div id="kpiRiskCount" class="text-2xl font-bold text-rose-500">0</div>
+                            <span class="text-[11px] text-rose-400 font-mono mt-1 block">Requires immediate action</span>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-dark-card border border-slate-800">
+                            <span class="text-xs text-slate-400 block mb-1">At-Risk Revenue Value</span>
+                            <div id="kpiAtRiskValue" class="text-2xl font-bold text-amber-400">$0</div>
+                            <span class="text-[11px] text-slate-400 font-mono mt-1 block">Linked to negative rows</span>
+                        </div>
+                    </div>
+
+                    <!-- Dataset Status Bar & Quick Actions -->
+                    <div class="p-5 rounded-2xl bg-dark-card border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div id="statusDot" class="w-3.5 h-3.5 rounded-full bg-slate-600"></div>
+                            <div>
+                                <h4 id="statusTitle" class="text-sm font-semibold text-white">No Dataset Loaded</h4>
+                                <p id="statusDesc" class="text-xs text-slate-400">Upload a CSV/JSON file or click a sample dataset above.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button onclick="exportAnalyzedCSV()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-all">
+                                <i data-lucide="download" class="w-3.5 h-3.5 text-brand-accent"></i> Export Analyzed CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Batch Insights List -->
+                    <div class="p-5 rounded-2xl bg-dark-card border border-slate-800">
+                        <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-brand-accent"></i> Key AI Dataset Takeaways
+                        </h4>
+                        <div id="batchTakeaways" class="text-xs text-slate-400 space-y-2 leading-relaxed">
+                            <p class="italic text-slate-500">Run analysis to see key themes, top friction points, and revenue recommendations automatically derived from your dataset.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- INTERACTIVE DATASET TABLE -->
+            <div class="mt-12 bg-dark-card border border-slate-800 rounded-2xl p-6 shadow-2xl overflow-hidden">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+                    <div>
+                        <h3 class="text-base font-semibold text-white flex items-center gap-2">
+                            <i data-lucide="table" class="w-5 h-5 text-brand-400"></i> Analyzed Row Inspection & Drill-Down
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">Search, filter, or click any row to inspect deep sentiment emotion vectors.</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                        <!-- Search Box -->
+                        <div class="relative">
+                            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                            <input type="text" id="tableSearch" onkeyup="filterTable()" placeholder="Search review text or name..." class="pl-8 pr-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 w-48 sm:w-64">
+                        </div>
+
+                        <!-- Filter Dropdown -->
+                        <select id="tableFilter" onchange="filterTable()" class="bg-slate-950 border border-slate-800 text-xs text-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:border-brand-500">
+                            <option value="all">All Sentiments</option>
+                            <option value="risk">High Risk / Negative Only</option>
+                            <option value="positive">Positive / Advocates</option>
+                            <option value="highvalue">High Value Accounts</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Scrollable Table -->
+                <div class="overflow-x-auto mt-4 max-h-[480px] overflow-y-auto">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950 text-slate-400 uppercase font-mono text-[10px] sticky top-0 z-10 border-b border-slate-800">
+                            <tr>
+                                <th class="py-3 px-4">#</th>
+                                <th class="py-3 px-4">Customer / ID</th>
+                                <th class="py-3 px-4">Feedback / Review Snippet</th>
+                                <th class="py-3 px-4">Sentiment Score</th>
+                                <th class="py-3 px-4">Detected Intent</th>
+                                <th class="py-3 px-4">Deal / Value</th>
+                                <th class="py-3 px-4">Risk Level</th>
+                                <th class="py-3 px-4 text-right">Inspect</th>
+                            </tr>
+                        </thead>
+                        <tbody id="datasetTableBody" class="divide-y divide-slate-800/60 font-sans">
+                            <tr>
+                                <td colspan="8" class="py-12 text-center text-slate-500 font-mono">No dataset loaded yet. Upload a CSV/JSON or select a sample dataset above.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 3: VISUAL ANALYTICS DASHBOARD -->
+    <section id="dashboard" class="py-20 bg-slate-950/60 border-y border-slate-800/60 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+                <div>
+                    <span class="text-xs font-semibold tracking-wider text-brand-accent uppercase bg-brand-accent/10 px-3 py-1 rounded-full border border-brand-accent/20">Executive Insights</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white mt-3">Dataset Analytics Dashboard</h2>
+                    <p class="text-slate-400 mt-1 text-sm">Visual metrics automatically synced with active CSV/JSON dataset rows.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Chart 1: Sentiment Distribution -->
+                <div class="lg:col-span-4 bg-dark-card border border-slate-800 rounded-2xl p-6">
+                    <h3 class="text-sm font-semibold text-white mb-1">Sentiment Distribution</h3>
+                    <p class="text-xs text-slate-400 mb-4">Positive vs Neutral vs Risk breakdown</p>
+                    <div class="h-60 relative">
+                        <canvas id="sentimentDoughnutChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Detected Intent Signal Breakdown -->
+                <div class="lg:col-span-4 bg-dark-card border border-slate-800 rounded-2xl p-6">
+                    <h3 class="text-sm font-semibold text-white mb-1">Detected Intent Categories</h3>
+                    <p class="text-xs text-slate-400 mb-4">Churn vs Upsell vs Support Friction</p>
+                    <div class="h-60 relative">
+                        <canvas id="intentBarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 3: Topic & Feature Aspect Radar/Bar -->
+                <div class="lg:col-span-4 bg-dark-card border border-slate-800 rounded-2xl p-6">
+                    <h3 class="text-sm font-semibold text-white mb-1">Key Aspect & Feature Friction</h3>
+                    <p class="text-xs text-slate-400 mb-4">Mention volume by product topic</p>
+                    <div class="h-60 relative">
+                        <canvas id="topicBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: SINGLE TEXT QUICK ANALYZER MODULE -->
+    <section id="quick-demo" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <span class="text-xs font-semibold tracking-wider text-brand-accent uppercase bg-brand-accent/10 px-3 py-1 rounded-full border border-brand-accent/20">Single Entry Inspector</span>
+                <h2 class="text-3xl font-bold text-white mt-3">Single Review & Sales Transcript Analyzer</h2>
+                <p class="text-slate-400 mt-2 text-sm max-w-xl mx-auto">Inspect individual customer calls, emails, or reviews in real-time.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left Input Box -->
+                <div class="lg:col-span-5 bg-dark-card border border-slate-800 rounded-2xl p-6 shadow-2xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <label for="singleInputText" class="text-xs font-semibold text-slate-300 flex items-center gap-2">
+                            <i data-lucide="file-text" class="w-4 h-4 text-brand-400"></i> Review / Transcript Text
+                        </label>
+                        <span id="singleCharCount" class="text-xs text-slate-500">0 chars</span>
+                    </div>
+
+                    <textarea id="singleInputText" rows="10" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs text-slate-200 focus:outline-none focus:border-brand-500 resize-none font-mono" placeholder="Paste customer transcript or review text here..."></textarea>
+
+                    <div class="mt-4 flex items-center justify-between">
+                        <button onclick="document.getElementById('singleInputText').value=''; updateSingleCharCount();" class="text-xs text-slate-400 hover:text-slate-200">Clear</button>
+                        <button onclick="analyzeSingleText()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-brand-accent hover:from-brand-500 text-white font-medium text-xs shadow-lg flex items-center gap-2">
+                            <i data-lucide="cpu" class="w-4 h-4"></i> Run AI Analysis
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Analysis Output -->
+                <div class="lg:col-span-7 bg-dark-card border border-slate-800 rounded-2xl p-6 shadow-2xl">
+                    <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-800">
+                        <h3 class="text-sm font-semibold text-white">Analysis Result</h3>
+                        <span class="text-[11px] font-mono text-brand-accent bg-brand-accent/10 px-2.5 py-0.5 rounded border border-brand-accent/20">Model: NLP-Pulse-v4</span>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 mb-6">
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <span class="text-[11px] text-slate-400 block">Sentiment Score</span>
+                            <span id="singleScoreLabel" class="text-lg font-bold text-emerald-400">Positive (88%)</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <span class="text-[11px] text-slate-400 block">Detected Intent</span>
+                            <span id="singleIntentLabel" class="text-xs font-bold text-brand-300 mt-1 block">Upsell Opportunity</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <span class="text-[11px] text-slate-400 block">Risk Level</span>
+                            <span id="singleRiskLabel" class="text-xs font-bold text-emerald-400 mt-1 block">LOW RISK</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 text-xs text-slate-300">
+                        <h4 class="font-semibold text-slate-200 uppercase tracking-wider text-[11px]">Recommended AI Next Actions:</h4>
+                        <ul id="singleActionsList" class="space-y-1.5 list-disc list-inside text-slate-400">
+                            <li>Trigger automated follow-up thanking customer and offering plan expansion.</li>
+                            <li>Sync feedback score (+88) to CRM contact record.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: FEATURES SHOWCASE -->
+    <section id="features" class="py-20 bg-slate-950/60 border-y border-slate-800/60 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-xs font-semibold tracking-wider text-brand-400 uppercase bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/20">Capabilities</span>
+                <h2 class="text-3xl sm:text-5xl font-bold text-white mt-4">Enterprise Feedback Intelligence Engine</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-panel p-8 rounded-2xl border border-slate-800">
+                    <div class="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 mb-6">
+                        <i data-lucide="file-spreadsheet" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Bulk CSV & JSON Processing</h3>
+                    <p class="text-slate-400 text-sm mt-3">Process files with thousands of rows directly in browser memory without sending private data to external servers.</p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl border border-slate-800">
+                    <div class="w-12 h-12 rounded-xl bg-brand-accent/10 border border-brand-accent/20 flex items-center justify-center text-brand-accent mb-6">
+                        <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Churn Risk Detection</h3>
+                    <p class="text-slate-400 text-sm mt-3">Automatically correlates customer review tone with dollar deal value to alert team of high-ARR customer churn risk.</p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl border border-slate-800">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-6">
+                        <i data-lucide="download" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Instant CSV Dataset Export</h3>
+                    <p class="text-slate-400 text-sm mt-3">Export your analyzed dataset complete with computed sentiment scores, intent tags, and risk flags back to CSV.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: INTERACTIVE ROI CALCULATOR -->
+    <section id="calculator" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-5">
+                    <span class="text-xs font-semibold tracking-wider text-emerald-400 uppercase bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">Calculator</span>
+                    <h2 class="text-3xl font-bold text-white mt-4">Estimate Revenue Recovered From Dataset Insights</h2>
+                    <p class="text-slate-400 mt-4 text-sm leading-relaxed">Adjust your monthly review volume and customer deal value to see projected revenue saved from silent churn.</p>
+                </div>
+
+                <div class="lg:col-span-7 bg-dark-card border border-slate-800 p-8 rounded-2xl">
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between items-center mb-2 text-xs font-semibold">
+                                <span class="text-slate-200">Monthly Feedback & Review Volume</span>
+                                <span id="roiVolVal" class="text-brand-accent font-mono">5,000</span>
+                            </div>
+                            <input type="range" id="roiVolSlider" min="500" max="50000" step="500" value="5000" oninput="updateROI()" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-brand-500">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-2 text-xs font-semibold">
+                                <span class="text-slate-200">Average Customer Annual Value (ACV)</span>
+                                <span id="roiAcvVal" class="text-brand-accent font-mono">$15,000</span>
+                            </div>
+                            <input type="range" id="roiAcvSlider" min="1000" max="100000" step="1000" value="15000" oninput="updateROI()" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-brand-500">
+                        </div>
+
+                        <div class="pt-6 border-t border-slate-800 grid grid-cols-2 gap-4">
+                            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                                <span class="text-[11px] text-slate-400 block">Est. Saved Revenue / Yr</span>
+                                <span id="roiSavedARR" class="text-2xl font-bold text-emerald-400">$105,000</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                                <span class="text-[11px] text-slate-400 block">Hours Saved / Mo</span>
+                                <span id="roiHoursSaved" class="text-2xl font-bold text-brand-accent">250 hrs</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING TIERS -->
+    <section id="pricing" class="py-20 bg-slate-950/60 border-t border-slate-800/60 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-white">Flexible Pricing Plans</h2>
+                <p class="text-slate-400 mt-2 text-sm">Start processing your CSV and review datasets today.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="glass-panel p-8 rounded-2xl border border-slate-800">
+                    <h3 class="text-xl font-bold text-white">Starter</h3>
+                    <div class="mt-4"><span class="text-4xl font-extrabold text-white">$99</span><span class="text-slate-400 text-xs"> / mo</span></div>
+                    <ul class="mt-6 space-y-2 text-xs text-slate-300">
+                        <li>• Up to 10,000 dataset rows / mo</li>
+                        <li>• Basic CSV / JSON Import & Export</li>
+                        <li>• Sentiment & Churn Flags</li>
+                    </ul>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl border-2 border-brand-500 relative">
+                    <span class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-brand-500 text-white text-[10px] font-bold uppercase">Popular</span>
+                    <h3 class="text-xl font-bold text-white">Growth Scale</h3>
+                    <div class="mt-4"><span class="text-4xl font-extrabold text-white">$299</span><span class="text-slate-400 text-xs"> / mo</span></div>
+                    <ul class="mt-6 space-y-2 text-xs text-slate-300">
+                        <li>• Up to 100,000 dataset rows / mo</li>
+                        <li>• Advanced Auto-Column Detection</li>
+                        <li>• Full Dashboard & Visual Charts</li>
+                        <li>• Export Analyzed Datasets</li>
+                    </ul>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl border border-slate-800">
+                    <h3 class="text-xl font-bold text-white">Enterprise</h3>
+                    <div class="mt-4"><span class="text-4xl font-extrabold text-white">Custom</span></div>
+                    <ul class="mt-6 space-y-2 text-xs text-slate-300">
+                        <li>• Unlimited dataset volume</li>
+                        <li>• Fine-tuned Industry NLP Models</li>
+                        <li>• Dedicated Success Manager</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-10 text-slate-400 text-xs text-center">
+        <p>© 2026 SentimentPulse AI Inc. All rights reserved. Revenue & CSV Dataset Intelligence.</p>
+    </footer>
+
+    <!-- ROW INSPECTION MODAL -->
+    <div id="rowModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-dark-card border border-slate-800 rounded-2xl max-w-2xl w-full p-6 relative">
+            <button onclick="closeRowModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <h3 class="text-base font-bold text-white mb-1">Row Inspection Detail</h3>
+            <p id="modalCustomer" class="text-xs text-brand-accent font-mono mb-4">Customer ID</p>
+
+            <div class="space-y-4">
+                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                    <span class="text-[11px] text-slate-400 block mb-1">Full Feedback Text:</span>
+                    <p id="modalText" class="text-xs text-slate-200 font-mono leading-relaxed"></p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                        <span class="text-[11px] text-slate-400 block">Computed Score</span>
+                        <span id="modalScore" class="text-sm font-bold text-emerald-400">88%</span>
+                    </div>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                        <span class="text-[11px] text-slate-400 block">Intent Tag</span>
+                        <span id="modalIntent" class="text-xs font-bold text-brand-300">Upsell</span>
+                    </div>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                        <span class="text-[11px] text-slate-400 block">Deal Value</span>
+                        <span id="modalValue" class="text-xs font-bold text-white">$12,000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+        // Global State for Active Loaded Dataset
+        let currentRawData = [];
+        let analyzedDataset = [];
+        let columnHeaders = [];
+        let sentimentDoughnut, intentBar, topicBar;
+
+        // Sample Pre-built Datasets
+        const sampleDatasets = {
+            saas: [
+                { id: "ACC-101", customer: "Acme Corp", text: "The reporting suite is fantastic! But we had 2 sync outages this month. If this continues, VP wants to switch to Competitor X.", rating: 2, value: 45000, date: "2026-10-12" },
+                { id: "ACC-102", customer: "TechFlow Inc", text: "Onboarding was super smooth. Love the AI sentiment analysis. Expanding to 50 seats next month!", rating: 5, value: 24000, date: "2026-10-14" },
+                { id: "ACC-103", customer: "Starlight Labs", text: "API response time is very slow during
